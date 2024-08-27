@@ -1,9 +1,8 @@
 asgiref==3.8.1
 Django==5.1
+djangorestframework>=3.12.4,<3.13
 sqlparse==0.5.1
 tzdata==2024.1
 psycopg2>=2.8
-#redis
 redis>=3.5
-#celery
 celery>=5.0

@@ -21,14 +21,17 @@ services:
       - "5432:5432"
 
   django:
-    build: .
-    volumes:
-      - .:/django
+    build:
+      context: .
+      args:
+        - DEV=true
     ports:
       - 8000:8000
+    volumes:
+      - ./app:/app
     image: app:django
     container_name: django_app
-    command: python manage.py runserver 0.0.0.0:8000
+    command: sh -c "python manage.py runserver 0.0.0.0:8000"
     restart: unless-stopped
     depends_on:
       - db
@@ -36,9 +39,9 @@ services:
   celery:
     build:
       context: .
-    command: celery -A core worker -l INFO
+    command: celery -A app worker -l INFO
     volumes:
-      - .:/django
+      - ./app:/app
     container_name: celery
     restart: unless-stopped
     depends_on:
