@@ -1,0 +1,61 @@
+version: "3.8"
+services:
+  redis:
+    image: redis
+    container_name: redis
+    restart: on-failure
+    volumes:
+      - redis:/data:rw
+
+  db:
+    image: postgres
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=mason_db
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    restart: on-failure
+    container_name: prosgresql_db
+    ports:
+      - "5432:5432"
+
+  django:
+    build: .
+    volumes:
+      - .:/django
+    ports:
+      - 8000:8000
+    image: app:django
+    container_name: django_app
+    command: python manage.py runserver 0.0.0.0:8000
+    restart: unless-stopped
+    depends_on:
+      - db
+
+  celery:
+    build:
+      context: .
+    command: celery -A core worker -l INFO
+    volumes:
+      - .:/django
+    container_name: celery
+    restart: unless-stopped
+    depends_on:
+      - db
+      - redis
+      - django
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/nginx-setup.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: on-failure
+    depends_on:
+      - django
+
+volumes:
+  postgres:
+  redis:
