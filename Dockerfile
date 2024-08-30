@@ -13,7 +13,7 @@ RUN apt-get update && \
 # Copy the current directory contents into the container
 COPY requirements.txt /tmp/requirements.txt
 COPY requirements.dev.txt /tmp/requirements.dev.txt
-copy ./app /app
+copy . /app
 
 WORKDIR /app
 
