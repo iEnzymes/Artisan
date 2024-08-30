@@ -12,13 +12,13 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=mason_db
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     restart: on-failure
-    container_name: prosgresql_db
+    container_name: postgresql
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
 
   django:
     build:
@@ -30,7 +30,7 @@ services:
     volumes:
       - ./app:/app
     image: app:django
-    container_name: django_app
+    container_name: django
     command: sh -c "python manage.py runserver 0.0.0.0:8000"
     restart: unless-stopped
     depends_on:
@@ -51,6 +51,7 @@ services:
 
   nginx:
     image: nginx:latest
+    container_name: nginx
     ports:
       - 80:80
     volumes:
