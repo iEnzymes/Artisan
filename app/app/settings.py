@@ -11,6 +11,13 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from decouple import Config, RepositoryEnv
+
+# Specify the path to your .env file
+env_file_path = '../../.env'
+
+# Create a Config object with the specified .env file
+config = Config(RepositoryEnv(env_file_path))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
