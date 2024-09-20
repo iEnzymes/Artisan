@@ -21,6 +21,7 @@ class UserAdmin(BaseUserAdmin):
                     'first_name',
                     'last_name',
                     'middle_name',
+                    'user_type',
                 )
             }
         ),
@@ -63,3 +64,19 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.register(models.User, UserAdmin)
+
+
+@admin.register(models.UserType)
+class UserTypeAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'name',
+    ]
+
+
+@admin.register(models.Services)
+class ServicesAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'name',
+    ]

@@ -4,10 +4,12 @@ Views for the user API.
 from rest_framework import generics, authentication, permissions
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
+from core.models import UserType
 
 from user.serializers import (
     UserSerializer,
     AuthTokenSerializer,
+    UserTypeSerializer
 )
 
 
@@ -31,3 +33,10 @@ class ManageUserView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         """Retrieve and return the authenticated user."""
         return self.request.user
+
+
+class UserTypeView(generics.ListAPIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = UserType.objects.all()
+    serializer_class = UserTypeSerializer

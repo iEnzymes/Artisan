@@ -9,6 +9,20 @@ from django.contrib.auth.models import (
 )
 
 
+class UserType(models.Model):
+    name = models.CharField(max_length=50, unique=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Services(models.Model):
+    name = models.CharField(max_length=50, unique=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+
 class UserManager(BaseUserManager):
     """Manager for users."""
 
@@ -38,6 +52,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     middle_name = models.CharField(max_length=255)
+    user_type = models.ForeignKey(
+            UserType,
+            on_delete=models.CASCADE,
+            null=True
+        )
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 

@@ -5,9 +5,16 @@ from django.contrib.auth import (
     get_user_model,
     authenticate,
 )
+from core.models import UserType
 from django.utils.translation import gettext as _
 
 from rest_framework import serializers
+
+
+class UserTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserType
+        fields = ['id', 'name']
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -21,6 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'middle_name',
+            'user_type'
         ]
         extra_kwargs = {'password': {'write_only': True, 'min_length': 5}}
 
